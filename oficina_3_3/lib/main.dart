@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 void main() {
   runApp(const MyApp());
@@ -14,93 +15,277 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        scaffoldBackgroundColor: Colors.white,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: Scaffold(
+        body: Center(
+          child: Column(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Botões',
+                    style: GoogleFonts.poppins(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 20,
+                    alignment: WrapAlignment.spaceBetween,
+                    runAlignment: WrapAlignment.spaceBetween,
+                    children: const [
+                      BotaoBase(
+                        texto: 'Botão base',
+                      ),
+                      BotaoAzul(
+                        texto: 'Botão azul',
+                      ),
+                      BotaoVerde(texto: 'Botão verde')
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 20,
+                    alignment: WrapAlignment.spaceBetween,
+                    runAlignment: WrapAlignment.spaceBetween,
+                    children: const [
+                      BotaoRedondoBase(texto: 'Botão redondo base'),
+                      BotaoRedondoAzul(texto: 'Botão redondo azul'),
+                      BotaoRedondoAmarelo(texto: 'Botão redondo amarelo')
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 20,
+                    alignment: WrapAlignment.spaceBetween,
+                    runAlignment: WrapAlignment.spaceBetween,
+                    children: const [
+                      BotaoIconeBase(
+                        texto: 'Botão com ícone base',
+                        cor: Colors.black,
+                        icone: Icon(
+                          Icons.info,
+                          color: Colors.lightBlue,
+                        ),
+                      ),
+                      BotaoIconeAlerta(texto: 'Botão com ícone de alerta'),
+                      BotaoIconeAprovado(texto: 'Botão com ícone de feito'),
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class BotaoBase extends StatelessWidget {
+  final String texto;
+  final Color cor;
+  final Color bg;
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
-  }
+  const BotaoBase({
+    Key? key,
+    required this.texto,
+    this.cor = Colors.black,
+    this.bg = Colors.grey,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
-    return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
+    return Container(
+      color: bg,
+      child: TextButton(
+        onPressed: () => {
+          ScaffoldMessenger.of(context).clearSnackBars(),
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                'Clicou no ' + texto.toString(),
+                style: GoogleFonts.poppins(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              backgroundColor: Colors.blue,
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-          ],
+          ),
+        },
+        child: Text(
+          texto,
+          style: GoogleFonts.poppins(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            color: cor,
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+}
+
+class BotaoAzul extends BotaoBase {
+  const BotaoAzul({
+    Key? key,
+    required String texto,
+  }) : super(key: key, texto: texto, cor: Colors.black, bg: Colors.blueAccent);
+}
+
+class BotaoVerde extends BotaoBase {
+  const BotaoVerde({
+    Key? key,
+    required String texto,
+  }) : super(key: key, texto: texto, cor: Colors.black, bg: Colors.greenAccent);
+}
+
+class BotaoRedondoBase extends StatelessWidget {
+  final String texto;
+  final Color cor;
+  final Color bg;
+
+  const BotaoRedondoBase({
+    Key? key,
+    required this.texto,
+    this.cor = Colors.black,
+    this.bg = Colors.grey,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton(
+      onPressed: () => {
+        ScaffoldMessenger.of(context).clearSnackBars(),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Clicou no ' + texto.toString(),
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            backgroundColor: Colors.blue,
+          ),
+        ),
+      },
+      child: Text(
+        texto,
+        style: GoogleFonts.poppins(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: cor,
+        ),
+      ),
+      style: TextButton.styleFrom(
+        shape: const StadiumBorder(),
+        primary: cor,
+        backgroundColor: bg,
+      ),
+    );
+  }
+}
+
+class BotaoRedondoAzul extends BotaoRedondoBase {
+  const BotaoRedondoAzul({
+    Key? key,
+    required String texto,
+  }) : super(key: key, texto: texto, cor: Colors.black, bg: Colors.blueAccent);
+}
+
+class BotaoRedondoAmarelo extends BotaoRedondoBase {
+  const BotaoRedondoAmarelo({
+    Key? key,
+    required String texto,
+  }) : super(
+            key: key, texto: texto, cor: Colors.black, bg: Colors.yellowAccent);
+}
+
+class BotaoIconeBase extends StatelessWidget {
+  final String texto;
+  final Color cor;
+  final Icon icone;
+
+  const BotaoIconeBase({
+    Key? key,
+    required this.texto,
+    required this.cor,
+    required this.icone,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return TextButton.icon(
+      icon: icone,
+      onPressed: () => {
+        ScaffoldMessenger.of(context).clearSnackBars(),
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Clicou no ' + texto.toString(),
+              style: GoogleFonts.poppins(
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            backgroundColor: Colors.blue,
+          ),
+        ),
+      },
+      label: Text(
+        texto,
+        style: GoogleFonts.poppins(
+          fontSize: 18,
+          fontWeight: FontWeight.w500,
+          color: cor,
+        ),
+      ),
+      style: TextButton.styleFrom(
+        backgroundColor: Colors.blueGrey,
+      ),
+    );
+  }
+}
+
+class BotaoIconeAlerta extends BotaoIconeBase {
+  const BotaoIconeAlerta({
+    Key? key,
+    required texto,
+  }) : super(
+          key: key,
+          texto: texto,
+          cor: Colors.amber,
+          icone: const Icon(
+            Icons.warning,
+            color: Colors.redAccent,
+          ),
+        );
+}
+
+class BotaoIconeAprovado extends BotaoIconeBase {
+  const BotaoIconeAprovado({
+    Key? key,
+    required texto,
+  }) : super(
+            key: key,
+            texto: texto,
+            cor: Colors.black,
+            icone: const Icon(
+              Icons.check,
+              color: Colors.greenAccent,
+            ));
 }
