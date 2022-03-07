@@ -1,17 +1,12 @@
 import 'package:flutter/material.dart';
 
-void main() => runApp(Calculadora());
+import 'package:calculadora_flutter_dell/calculadora_store.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
-class Calculadora extends StatefulWidget {
-  @override
-  _CalculadoraState createState() => _CalculadoraState();
-}
+void main() => runApp(MyApp());
 
-class _CalculadoraState extends State<Calculadora> {
-  int primeiroNumero;
-  int segundoNumero;
-  String operacaoEscolhida;
-  double resultado;
+class MyApp extends StatelessWidget {
+  final _calculadora = CalculadoraStore();
 
   @override
   Widget build(BuildContext context) {
@@ -28,18 +23,25 @@ class _CalculadoraState extends State<Calculadora> {
               padding: const EdgeInsets.all(18),
               child: Column(
                 children: <Widget>[
-                  Numeros(onPrimeiroNumeroEscolhido),
+                  Numeros(_calculadora.onPrimeiroNumeroEscolhido),
                   Divider(),
-                  Operacoes(onOperacaoEscolhida),
+                  Operacoes(_calculadora.onOperacaoEscolhida),
                   Divider(),
-                  Numeros(onSegundoNumeroEscolhido),
+                  Numeros(_calculadora.onSegundoNumeroEscolhido),
                   Divider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      BotaoCalcular(
-                          todasOpcoesForamEscolhidas() ? onClickBotao : null),
-                      BotaoZerar(onClickBotaoZerar)
+                      Observer(
+                        builder: (_) => BotaoCalcular(
+                            _calculadora.todasOpcoesForamEscolhidas()
+                                ? _calculadora.onClickBotao
+                                : () {}),
+                      ),
+                      Observer(
+                        builder: (_) =>
+                            BotaoZerar(_calculadora.onClickBotaoZerar),
+                      ),
                     ],
                   ),
                   Divider(),
@@ -49,24 +51,21 @@ class _CalculadoraState extends State<Calculadora> {
                         'Operação: ',
                         style: TextStyle(fontSize: 28),
                       ),
-                      primeiroNumero != null
-                          ? Text(
-                              primeiroNumero.toString(),
-                              style: TextStyle(fontSize: 28),
-                            )
-                          : SizedBox.shrink(),
-                      operacaoEscolhida != null
-                          ? Text(
-                              operacaoEscolhida,
-                              style: TextStyle(fontSize: 28),
-                            )
-                          : SizedBox.shrink(),
-                      segundoNumero != null
-                          ? Text(
-                              segundoNumero.toString(),
-                              style: TextStyle(fontSize: 28),
-                            )
-                          : SizedBox.shrink(),
+                      Observer(
+                          builder: (_) => Text(
+                                _calculadora.primeiroNumero.toString(),
+                                style: TextStyle(fontSize: 28),
+                              )),
+                      Observer(
+                          builder: (_) => Text(
+                                _calculadora.operacaoEscolhida,
+                                style: TextStyle(fontSize: 28),
+                              )),
+                      Observer(
+                          builder: (_) => Text(
+                                _calculadora.segundoNumero.toString(),
+                                style: TextStyle(fontSize: 28),
+                              )),
                     ],
                   ),
                   Row(
@@ -75,12 +74,11 @@ class _CalculadoraState extends State<Calculadora> {
                         'Resultado: ',
                         style: TextStyle(fontSize: 28),
                       ),
-                      resultado != null
-                          ? Text(
-                              resultado.toStringAsFixed(2),
-                              style: TextStyle(fontSize: 28),
-                            )
-                          : SizedBox.shrink(),
+                      Observer(
+                          builder: (_) => Text(
+                                _calculadora.resultado.toStringAsFixed(2),
+                                style: TextStyle(fontSize: 28),
+                              )),
                     ],
                   ),
                 ],
@@ -91,55 +89,6 @@ class _CalculadoraState extends State<Calculadora> {
       ),
     );
   }
-
-  bool todasOpcoesForamEscolhidas() {
-    return primeiroNumero != null &&
-        segundoNumero != null &&
-        operacaoEscolhida != null;
-  }
-
-  void onClickBotao() {
-    setState(() {
-      if (operacaoEscolhida == '+') {
-        resultado = (primeiroNumero + segundoNumero).toDouble();
-      } else if (operacaoEscolhida == '-') {
-        resultado = (primeiroNumero - segundoNumero).toDouble();
-      } else if (operacaoEscolhida == '*') {
-        resultado = (primeiroNumero * segundoNumero).toDouble();
-      } else if (operacaoEscolhida == '/') {
-        resultado = (primeiroNumero / segundoNumero).toDouble();
-      } else if (operacaoEscolhida == '%') {
-        resultado = (primeiroNumero % segundoNumero).toDouble();
-      }
-    });
-  }
-
-  void onClickBotaoZerar() {
-    setState(() {
-      primeiroNumero = null;
-      segundoNumero = null;
-      operacaoEscolhida = null;
-      resultado = null;
-    });
-  }
-
-  void onPrimeiroNumeroEscolhido(int numero) {
-    setState(() {
-      primeiroNumero = numero;
-    });
-  }
-
-  void onSegundoNumeroEscolhido(int numero) {
-    setState(() {
-      segundoNumero = numero;
-    });
-  }
-
-  void onOperacaoEscolhida(String operacao) {
-    setState(() {
-      operacaoEscolhida = operacao;
-    });
-  }
 }
 
 class BotaoZerar extends StatelessWidget {
@@ -149,8 +98,11 @@ class BotaoZerar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      color: Colors.blue,
+    return TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.blue,
+        backgroundColor: Colors.blue,
+      ),
       onPressed: onClickBotao,
       child: Text(
         'Zerar',
@@ -170,8 +122,11 @@ class BotaoCalcular extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RaisedButton(
-      color: Colors.blue,
+    return TextButton(
+      style: TextButton.styleFrom(
+        primary: Colors.blue,
+        backgroundColor: Colors.blue,
+      ),
       onPressed: onClickBotao,
       child: Text(
         'Calcular',
