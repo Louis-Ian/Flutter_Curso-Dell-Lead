@@ -8,50 +8,39 @@ part of 'tarefas_store.dart';
 
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
-mixin _$TarefaStore on _TarefaStore, Store {
-  final _$tarefaListAtom = Atom(name: '_TarefaStore.tarefaList');
+mixin _$Tarefa on _Tarefa, Store {
+  final _$descricaoAtom = Atom(name: '_Tarefa.descricao');
 
   @override
-  ObservableList<dynamic> get tarefaList {
-    _$tarefaListAtom.reportRead();
-    return super.tarefaList;
+  String get descricao {
+    _$descricaoAtom.reportRead();
+    return super.descricao;
   }
 
   @override
-  set tarefaList(ObservableList<dynamic> value) {
-    _$tarefaListAtom.reportWrite(value, super.tarefaList, () {
-      super.tarefaList = value;
+  set descricao(String value) {
+    _$descricaoAtom.reportWrite(value, super.descricao, () {
+      super.descricao = value;
     });
   }
 
-  final _$_TarefaStoreActionController = ActionController(name: '_TarefaStore');
+  final _$_TarefaActionController = ActionController(name: '_Tarefa');
 
   @override
-  void removerTarefa(int id) {
-    final _$actionInfo = _$_TarefaStoreActionController.startAction(
-        name: '_TarefaStore.removerTarefa');
+  void updateTarefa(String descricao) {
+    final _$actionInfo =
+        _$_TarefaActionController.startAction(name: '_Tarefa.updateTarefa');
     try {
-      return super.removerTarefa(id);
+      return super.updateTarefa(descricao);
     } finally {
-      _$_TarefaStoreActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
-  void addTarefa(String descricao) {
-    final _$actionInfo = _$_TarefaStoreActionController.startAction(
-        name: '_TarefaStore.addTarefa');
-    try {
-      return super.addTarefa(descricao);
-    } finally {
-      _$_TarefaStoreActionController.endAction(_$actionInfo);
+      _$_TarefaActionController.endAction(_$actionInfo);
     }
   }
 
   @override
   String toString() {
     return '''
-tarefaList: ${tarefaList}
+descricao: ${descricao}
     ''';
   }
 }

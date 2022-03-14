@@ -2,19 +2,16 @@ import 'package:mobx/mobx.dart';
 
 part 'tarefas_store.g.dart';
 
-class TarefaStore extends _TarefaStore with _$TarefaStore {}
+class Tarefa = _Tarefa with _$Tarefa;
 
-abstract class _TarefaStore with Store {
+abstract class _Tarefa with Store {
+  _Tarefa(this.descricao);
+
   @observable
-  ObservableList tarefaList = ObservableList<String>.of(['ex1', 'ex2']);
+  String descricao = '';
 
   @action
-  void removerTarefa(int id) {
-    tarefaList.removeAt(id);
-  }
-
-  @action
-  void addTarefa(String descricao) {
-    tarefaList.add(descricao);
+  void updateTarefa(String descricao) {
+    this.descricao = descricao;
   }
 }
