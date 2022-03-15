@@ -78,12 +78,3 @@ void main() {
     expect(_calculadora.primeiroNumero, 0);
   });
 }
-
-// class TestWidget extends StatelessWidget {
-//   const TestWidget({Key? key}) : super(key: key);
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Container();
-//   }
-// }
